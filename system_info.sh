@@ -41,10 +41,13 @@ echo -e "8 -System Load Avg:\n`w`"
 echo 
 echo -e "9 -Environment variables:\n`env`"
 echo 
+sleep 5
 echo -e "10 -All users:\n`cat /etc/passwd`"
 echo 
+sleep 5
 echo -e "11 -All groups:\n`cat /etc/group`"
 echo 
+sleep 5
 echo -e "11 -All files under /var/log:\n`la -ltr /var/log`"
 echo "___________________________________________________________________________________"
 ## --------------------------------------<General Infromation/end>-------------------------------##
@@ -55,8 +58,10 @@ echo "__________________________________________________________________________
 echo "****Kernel Information****"
 echo "___________________________________________________________________________________"
 echo  "1 - Kernel version: `uname -r`"
-echo 
+echo
+sleep 5 
 echo -e "2 - Sysctl -A:\n`sysctl -A`"
+sleep 10
 echo "___________________________________________________________________________________"
 
 ## --------------------------------------<CPU Infomation/end>-----------------------------------##
@@ -70,8 +75,10 @@ echo "__________________________________________________________________________
 echo " ****Memory Information****"
 echo 
 echo "___________________________________________________________________________________"
-echo 
+echo
+sleep 5 
 echo -e "1 - MemInfo:\n`cat /proc/meminfo`"
+sleep 5
 echo "___________________________________________________________________________________"
 
 echo -e "2 - Free:\n `free -m`"
@@ -87,13 +94,13 @@ echo "__________________________________________________________________________
 echo 
 echo "You Have `grep -c 'processor' /proc/cpuinfo` CPU"
 echo 
-echo "Your CPU model name is `awk -F':' '/^model name/ { print $2 }' /proc/cpuinfo`"
+echo "CPU model name is `awk -F':' '/^model name/ { print $2 }' /proc/cpuinfo`"
 echo 
-echo "Your CPU vendor`awk -F':' '/^vendor_id/ { print $2 }' /proc/cpuinfo`"
+echo "CPU vendor`awk -F':' '/^vendor_id/ { print $2 }' /proc/cpuinfo`"
 echo 
-echo "Your CPU Speed`awk -F':' '/^cpu MHz/ { print $2 }' /proc/cpuinfo`"
+echo "CPU Speed`awk -F':' '/^cpu MHz/ { print $2 }' /proc/cpuinfo`"
 echo 
-echo "Your CPU Cache Size`awk -F':' '/^cache size/ { print $2 }' /proc/cpuinfo`"
+echo "CPU Cache Size`awk -F':' '/^cache size/ { print $2 }' /proc/cpuinfo`"
 echo "___________________________________________________________________________________"
 
 ## --------------------------------------<CPU Information/end>-----------------------------------##
@@ -105,8 +112,10 @@ echo "__________________________________________________________________________
 echo "****Boot Information****"
 echo 
 echo "___________________________________________________________________________________"
-echo 
+echo
+sleep 5 
 echo "`cat /var/log/boot.log`"
+sleep 10
 echo "___________________________________________________________________________________"
 
 }
@@ -182,7 +191,9 @@ SERVICE='apache2'
 if ps ax | grep -v grep | grep $SERVICE > /dev/null
 then
     echo -e "$SERVICE service running\n"
+    sleep 2
     echo -e "Installed Package\n:`sudo dpkg -l | grep -i apache`"
+    sleep 2
 else
     #echo "$SERVICE is not running"
     echo "This is not a web server"
@@ -190,6 +201,25 @@ else
 fi
 
 }
+
+
+MailInfo(){
+## --------------------------------------<Apache  Information>-------------------------------------##
+echo "___________________________________________________________________________________"
+echo "****Mail Configuration Infromation****"
+SERVICE='exim'
+ 
+if ps ax | grep -v grep | grep $SERVICE > /dev/null
+then
+    echo -e "$SERVICE service running\n"
+    sleep 2
+    echo -e "Installed Package\n:`cat /etc/exim4/update-exim4.conf.conf`"
+    
+fi
+
+}
+
+
 
 ## --------------------------------------<script ending>-----------------------------------------##
 
@@ -203,12 +233,14 @@ CPUInfo
 BootInfo
 DiskInfo
 ApacheInfo
+MailInfo
 #FileSInfo
 #PCIInfo
 NetInfo
 #echo "</body></html>"
 }
-log=`hostname | cut -d"-" -f1`_$DATE
+#log=`hostname | cut -d"-" -f1`_$DATE
+log=`hostname`_$DATE
 Run | tee $log.sysinfo
 #mv $log.txt $log.html
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
